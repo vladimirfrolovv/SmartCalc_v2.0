@@ -1,10 +1,10 @@
-#include "s21_smart_calc.h"
+#include "model.h"
 
 double s21_callculation(char *ex_str, int *status, double x) {
   double result = 0.0;
   int i = 0;
   double value = 0;
-  list_value *list_val = NULL;
+  std *list_val = NULL;
   char str_value[MAX_NUM] = {0};
   int j = 0;
   memset(str_value, ' ', MAX_NUM);

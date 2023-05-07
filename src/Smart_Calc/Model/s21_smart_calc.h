@@ -1,15 +1,14 @@
-#ifndef SRC_S21_MATRIX_H_
-#define SRC_S21_MATRIX_H_
+#ifndef SRC_S21_SMART_CALCULATOR
+#define SRC_S21_SMART_CALCULATOR
 
 #include <ctype.h>
-#include <math.h>
+#include <math>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <stack>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MAX_NUM 30
 #define MAX_STR 604
@@ -170,8 +169,5 @@ list_value *s21_log(list_value *list_val, int *status);
 
 list_value *s21_degree(list_value *list_val, int *status);
 
-#ifdef __cplusplus
-}
-#endif
 
-#endif  // SRC_S21_MATRIX_H_
+#endif  // SRC_SMART_CALCULATOR
