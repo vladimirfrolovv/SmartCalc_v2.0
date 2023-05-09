@@ -1,4 +1,4 @@
-#include "model.h"
+//#include "model.h"
 
 double s21_callculation(char *ex_str, int *status, double x) {
   double result = 0.0;

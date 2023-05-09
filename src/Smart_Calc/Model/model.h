@@ -13,23 +13,26 @@
 #define MAX_NUM 30
 #define MAX_STR 604
 
+namespace s21 {
 
+    class Model {
+    public:
+        typedef struct stack_elem {
+            char elem;
+            int priority;
+        } stack_elem;
 
-class Model {
-public:
-    typedef struct stack_elem {
-        char elem;
-        int priority;
-    } stack_elem;
-    Model() = default;
-    ~Model() = default;
+        Model() = default;
+
+        ~Model() = default;
+
 // s21_polish.c
 /// @brief Function for parsing input expression polish notation
 /// @param str input expresion(str) in polish notation
 /// @param ex_str exit expression in polish notation
 /// @param status error if status ==0 it's ok if status == 1 it's error
 /// @return char *exit str in polish notation
-    char *parse(const char *str, char *ex_str, int *status);
+        char *parse( char *str, char *ex_str, int *status);
 
 /// @brief Function for checks current symbol is number in input str
 /// @param ex_str exit str
@@ -39,7 +42,7 @@ public:
 /// @param double_op flag for double operation
 /// @param flag_point flag for "."
 /// @return int i counter
-    int s21_parse_number(char *ex_str, char **str, int *status, int i,
+    void parse_number(char *ex_str, char **str, int *status, int i,
                          int *double_op, int *flag_point);
 
 /// @brief Function for checks current symbol is operator and push in stack or
@@ -55,7 +58,7 @@ public:
 /// @param number_of_brack counter for bracked
 /// @return stack
 
-    void *s21_parse_op(std::stack<stack_elem> &stack_op, char **ex_str, char **str, int *status, int *i,
+    void *parse_op(std::stack<stack_elem> &stack_op, char **ex_str, char **str, int *status, int *i,
                        int *flag_op, int *double_op, int *number_of_brack);
 
 /// @brief Function for checks current symbol is function and push in stack and
@@ -70,24 +73,24 @@ public:
 /// @param double_op flag for cheks double operator
 /// @return stack
 
-    void *s21_parse_func(std::stack<stack_elem> &stack_op, char **str, int *flag_op, int *flag_func,
+    void *parse_func(std::stack<stack_elem> &stack_op, char **str, int *flag_op, int *flag_func,
                          int *status, int *double_op);
 
 /// @brief Function for check current symbol is operator
 /// @param str current symbol
 /// @return int error
-    int s21_is_operator(char str);
+    int is_operator(char str);
 
 /// @brief Function for check priority operator
 /// @param str current sybol
 /// @return int priority
-    int s21_priority(char str);
+    int priority(char str);
 
 /// @brief Function for check current expresion is element array with function
 /// @param str pointer str element array with functoin
 /// @param prior priority function
 /// @return  char token(abbreviated function to 1 symbol
-    char s21_tok_func(char *str, int *prior);
+    char tok_func(char *str, int *prior);
 
 // s21_calculation.c
 /// @brief Function clalculation polish natation
@@ -132,7 +135,7 @@ public:
 //    list_value *s21_log(list_value *list_val, int *status);
 //
 //    list_value *s21_degree(list_value *list_val, int *status);
-    //
+        //
 //
 //// s21_stack.c
 //
@@ -169,6 +172,6 @@ public:
 ///// @return stack
 //    list_value *s21_pop_value(list_value *head);
 
-};
-
+    };
+}
 #endif  // SRC_SMART_CALCULATOR_
