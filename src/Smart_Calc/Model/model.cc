@@ -2,8 +2,9 @@
 namespace s21 {
     char *Model::parse(char *str, char *ex_str, int *status) {
         int i = 0, flag_op = 0, double_op = 1, flag_point = 0, number_of_brack = 0, flag_func = 0;
-        std::stack<stack_elem> stack_op;
         stack_elem st;
+        std::stack<stack_elem> stack_op;
+
         if (str != nullptr) {
             while (*str != '\0' && *status != 1) {
                 if ((flag_func && *str != '(') || *str == '.') {
@@ -28,10 +29,10 @@ namespace s21 {
                         str++;
                     }
                 }
-                parse_number(ex_str, &str, status, i, &double_op, &flag_point);
-                s21_parse_op(stack_op, &ex_str, &str, status, &i, &flag_op,
+                parse_number(&ex_str, &str, status, &double_op, &flag_point);
+                parse_op(stack_op, &ex_str, &str, status, &flag_op,
                              &double_op, &number_of_brack);
-                s21_parse_func(stack_op, &str, &flag_op, &flag_func, status,
+                parse_func(stack_op, &str, &flag_op, &flag_func, status,
                                &double_op);
                 if (*str != '\0') {
                     str++;
@@ -40,7 +41,7 @@ namespace s21 {
             while (stack_op.size() != 0) {
                 *ex_str = stack_op.top().elem;
                 stack_op.pop();
-                *ex_str = *ex_str + 2;
+                *ex_str = *ex_str + 1;
             }
             if (number_of_brack != 0) *status = 1;
             if (*status != 1) *ex_str = '\0';
@@ -56,7 +57,7 @@ namespace s21 {
                    **str == 'x') {
                 if (**str == '.') {
                     *flag_point += 1;
-                    if (*str + 1 != NULL) {
+                    if (*str + 1 != nullptr) {
                         if (!isdigit(*((*str + 1)))) *status = 1;
                     }
                 }
@@ -65,7 +66,7 @@ namespace s21 {
                 *str = *str + 1;
             }
             *double_op -= 1;
-         *ex_str = * ex_str +1;
+            *ex_str = * ex_str +1;
             if (*flag_point >= 2) {
                 *status = 1;
             } else {
@@ -74,10 +75,11 @@ namespace s21 {
         }
     }
 
-    void Model::parse_op(std::stack<stack_elem> *stack_op, char **ex_str, char **str, int *status,
-                             int *flag_op, int *double_op, int *number_of_brack) {
+    void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str, char **str, int *status,
+                         int *flag_op, int *double_op, int *number_of_brack) {
         int prior = -1;
-        if (s21_is_operator(**str) && *double_op != 2) {
+        stack_elem st;
+        if (is_operator(**str) && *double_op != 2) {
             if (**str == '(' && *double_op) {
                 if (*number_of_brack >= 0) {
                     *number_of_brack += 1;
@@ -101,7 +103,7 @@ namespace s21 {
                         stack_op.pop();
                         *flag_op = 0;
                     } else {
-                        while (stack_op->top().elem != '(') {
+                        while (stack_op.top().elem != '(') {
                             **ex_str = stack_op.top().elem;
                             *ex_str = *ex_str + 2;
                             stack_op.pop();
@@ -111,20 +113,26 @@ namespace s21 {
                     *number_of_brack -= 1;
                 }
             } else {
-                prior = s21_priority(**str);
-                if (stack_op->size() != 0) {
-                    stack_op->push(**str, prior);
+                prior = priority(**str);
+                if (stack_op.size() == 0) {
+                    st.elem = **str;
+                    st.priority = prior;
+                    stack_op.push(st);
                 } else {
                     if (stack_op.top().priority < prior) {
-                        stack_op->push(**str, prior);
+                        st.elem = **str;
+                        st.priority = prior;
+                        stack_op.push(st);
                     } else {
-                        while (stack_op->size() != 0 && prior <= stack_op.top().priority &&
+                        while (stack_op.size() != 0 && prior <= stack_op.top().priority &&
                                **str != '(') {
                             **ex_str = stack_op.top().elem;
                             *ex_str = *ex_str + 2;
                             stack_op.pop();
                         }
-                        stack_op->push(**str, prior);
+                        st.elem = **str;
+                        st.priority = prior;
+                        stack_op.push(st);
                     }
                 }
             }
@@ -137,7 +145,7 @@ namespace s21 {
         }
     }
 
-    int Model::s21_is_operator(char str) {
+    int Model::is_operator(char str) {
         int status = 0;
         switch (str) {
             case '+':
@@ -167,7 +175,7 @@ namespace s21 {
         return status;
     }
 
-    int Model::s21_priority(char str) {
+    int Model::priority(char str) {
         int prior = -1;
         switch (str) {
             case '^':
@@ -194,21 +202,24 @@ namespace s21 {
         return prior;
     }
 
-    std::stack<stack_elem> *Model::s21_parse_func(list *list_op, char **str, int *flag_op, int *flag_func,
+    void Model::parse_func(std::stack<stack_elem> &stack_op, char **str, int *flag_op, int *flag_func,
                                                   int *status, int *double_op) {
-        const char *func[10] = {"sin", "cos", "tan", "asin", "acos",
+        char *func[10] = {"sin", "cos", "tan", "asin", "acos",
                                 "atan", "mod", "sqrt", "ln", "log"};
         int len = 0;
         int prior = -1;
         char tok = ' ';
+        stack_elem st;
         for (int j = 0; j < 10; j++) {
             if (strstr(*str, func[j]) == *str) {
                 len = strlen(func[j]);
-                tok = s21_tok_func(func[j], &prior);
+                tok = tok_func(func[j], &prior);
             }
         }
         if (tok != ' ') {
-            list_op = s21_push(list_op, tok, prior);
+            st.elem = tok;
+            st.priority = prior;
+            stack_op.push(st);
             if (tok != 'm') {
                 *flag_func = 1;
             }
@@ -221,16 +232,14 @@ namespace s21 {
             }
             *status = 0;
         } else {
-            if (!s21_is_operator(**str) && !isdigit(**str) && **str != '.' &&
+            if (!is_operator(**str) && !isdigit(**str) && **str != '.' &&
                 **str != 'x' && **str != '\0') {
                 *status = 1;
             }
         }
-
-        return list_op;
     }
 
-    char Model::s21_tok_func(char *str, int *prior) {
+    char Model::tok_func(char *str, int *prior) {
         char tok = ' ';
         if (!strcmp(str, "sin")) {
             tok = 's';
