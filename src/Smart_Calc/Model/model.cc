@@ -34,6 +34,7 @@ namespace s21 {
                              &double_op, &number_of_brack);
                 parse_func(stack_op, &str, &flag_op, &flag_func, status,
                                &double_op);
+                i++;
                 if (*str != '\0') {
                     str++;
                 }
@@ -41,7 +42,7 @@ namespace s21 {
             while (stack_op.size() != 0) {
                 *ex_str = stack_op.top().elem;
                 stack_op.pop();
-                *ex_str = *ex_str + 1;
+                ex_str = ex_str + 2;
             }
             if (number_of_brack != 0) *status = 1;
             if (*status != 1) *ex_str = '\0';
@@ -52,7 +53,7 @@ namespace s21 {
 
     void Model::parse_number(char **ex_str, char **str, int *status,
                                       int *double_op, int *flag_point) {
-        if ((isdigit(**str)) || (**str == '.' && flag_point == 0) || **str == 'x') {
+        if ((isdigit(**str)) || (**str == '.' && flag_point == 0) || **str == 'x' || **str =='e') {
             while ((isdigit(**str)) || (**str == '.' && *flag_point <= 1) ||
                    **str == 'x') {
                 if (**str == '.') {
