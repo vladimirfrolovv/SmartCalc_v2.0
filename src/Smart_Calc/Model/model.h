@@ -21,7 +21,6 @@ namespace s21 {
             char elem = ' ';
             int priority =0;
         } stack_elem;
-
         Model() = default;
 
         ~Model() = default;
@@ -92,6 +91,10 @@ namespace s21 {
 /// @return  char token(abbreviated function to 1 symbol
     char tok_func(char *str, int *prior);
 
+        int unar_op_and_functions(std::stack<double> &stack_value, int status, char curr_op);
+        void func(std::stack<double> &stack_value, char symb, int *status);
+        double callculation(char *ex_str, int *status, double x);
+        int operators(std::stack<double> &stack_value, int status, char curr_op);
 // s21_calculation.c
 /// @brief Function clalculation polish natation
 /// @param ex_str expression in polish notation
