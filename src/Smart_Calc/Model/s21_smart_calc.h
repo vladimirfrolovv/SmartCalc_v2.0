@@ -2,13 +2,13 @@
 #define SRC_S21_SMART_CALCULATOR
 
 #include <ctype.h>
-#include <math>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <iostream>
-#include <stack>
 
+#include <iostream>
+#include <math>
+#include <stack>
 
 #define MAX_NUM 30
 #define MAX_STR 604
@@ -168,6 +168,5 @@ list_value *s21_ln(list_value *list_val, int *status);
 list_value *s21_log(list_value *list_val, int *status);
 
 list_value *s21_degree(list_value *list_val, int *status);
-
 
 #endif  // SRC_SMART_CALCULATOR

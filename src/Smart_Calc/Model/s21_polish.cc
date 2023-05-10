@@ -1,9 +1,8 @@
 //#include "model.h"
 //
-//char* Model::parse(const char *str, char *ex_str, int *status) {
-//  int i = 0 ,flag_op =0,double_op = 1, flag_point = 0,number_of_brack = 0,flag_func = 0;
-//  std::stack<stack_elem> stack_op;
-//  if (str != NULL) {
+// char* Model::parse(const char *str, char *ex_str, int *status) {
+//  int i = 0 ,flag_op =0,double_op = 1, flag_point = 0,number_of_brack =
+//  0,flag_func = 0; std::stack<stack_elem> stack_op; if (str != NULL) {
 //    while (*str != '\0' && *status != 1) {
 //      if ((flag_func && *str != '(') || *str == '.') {
 //        *status = 1;
@@ -44,7 +43,7 @@
 //  return ex_str;
 //}
 //
-//int  Model::s21_parse_number(char **ex_str, char **str, int *status,
+// int  Model::s21_parse_number(char **ex_str, char **str, int *status,
 //                     int *double_op, int *flag_point) {
 //  if ((isdigit(**str)) || (**str == '.' && flag_point == 0) || **str == 'x') {
 //    while ((isdigit(**str)) || (**str == '.' && *flag_point <= 1) ||
@@ -70,7 +69,8 @@
 //  return i;
 //}
 //
-//void Model::s21_parse_op(std::stack<stack_elem> *stack_op, char **ex_str, char **str, int *status,
+// void Model::s21_parse_op(std::stack<stack_elem> *stack_op, char **ex_str,
+// char **str, int *status,
 //                   int *flag_op, int *double_op, int *number_of_brack) {
 //  int prior = -1;
 //  if (s21_is_operator(**str) && *double_op != 2) {
@@ -133,7 +133,7 @@
 //  }
 //}
 //
-//int  Model::s21_is_operator(char str) {
+// int  Model::s21_is_operator(char str) {
 //  int status = 0;
 //  switch (str) {
 //    case '+':
@@ -163,7 +163,7 @@
 //  return status;
 //}
 //
-//int  Model::s21_priority(char str) {
+// int  Model::s21_priority(char str) {
 //  int prior = -1;
 //  switch (str) {
 //    case '^':
@@ -190,7 +190,8 @@
 //  return prior;
 //}
 //
-//std::stack<stack_elem>* Model::s21_parse_func(list *list_op, char **str, int *flag_op, int *flag_func,
+// std::stack<stack_elem>* Model::s21_parse_func(list *list_op, char **str, int
+// *flag_op, int *flag_func,
 //                     int *status, int *double_op) {
 //  const char *func[10] = {"sin",  "cos", "tan",  "asin", "acos",
 //                    "atan", "mod", "sqrt", "ln",   "log"};
@@ -226,7 +227,7 @@
 //  return list_op;
 //}
 //
-//char  Model::s21_tok_func(char *str, int *prior) {
+// char  Model::s21_tok_func(char *str, int *prior) {
 //  char tok = ' ';
 //  if (!strcmp(str, "sin")) {
 //    tok = 's';
