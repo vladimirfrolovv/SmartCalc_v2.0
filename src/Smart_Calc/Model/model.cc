@@ -1,6 +1,22 @@
 #include "model.h"
 
 namespace s21 {
+
+std::string Model::Result(std::string str_, std::string x_) {
+  char *str = const_cast<char *>(str_.c_str());
+  long double x = std::stold(x_);
+  char ex_str[MAX_STR] = {0};
+  int status = 0;
+  memset(ex_str, ' ', MAX_STR);
+  parse(str, ex_str, &status);
+  long double val = callculation(ex_str, &status, x);
+  std::string result = "ERROR";
+  if (status == 0) {
+    result = std::to_string(val);
+    return result;
+  }
+  return result;
+}
 char *Model::parse(char *str, char *ex_str, int *status) {
   int flag_op = 0, double_op = 1, flag_point = 0, number_of_brack = 0,
       flag_func = 0;
@@ -34,17 +50,13 @@ char *Model::parse(char *str, char *ex_str, int *status) {
         str++;
       }
     }
-    while (stack_op.size() != 0) {
+    while (!stack_op.empty()) {
       *ex_str = stack_op.top().elem;
       stack_op.pop();
       ex_str = ex_str + 2;
     }
     if (number_of_brack != 0) *status = 1;
     if (*status != 1) *ex_str = '\0';
-    if (*status) {
-      ex_str = tmp;
-      sprintf(ex_str, "%s", "ERROR");
-    }
   }
   return ex_str;
 }
@@ -113,7 +125,6 @@ void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str,
                      char **str, int *status, int *flag_op, int *double_op,
                      int *number_of_brack) {
   int prior = -1;
-  stack_elem st;
   if (is_operator(**str) && *double_op != 2) {
     if (**str == '(' && *double_op) {
       if (*number_of_brack >= 0) {
@@ -301,8 +312,8 @@ char Model::tok_func(char *str, int *prior) {
   return tok;
 }
 
-double Model::callculation(char *ex_str, int *status, double x) {
-  double result = 0.0;
+long double Model::callculation(char *ex_str, int *status, long double x) {
+  long double result = 0.0;
   int i = 0;
   double value = 0;
   std::stack<double> stack_value;
@@ -333,7 +344,7 @@ double Model::callculation(char *ex_str, int *status, double x) {
     }
     ex_str++;
   }
-  if (*status != 1 && stack_value.size() != 0) {
+  if (*status != 1 && !stack_value.empty()) {
     result = stack_value.top();
   }
 

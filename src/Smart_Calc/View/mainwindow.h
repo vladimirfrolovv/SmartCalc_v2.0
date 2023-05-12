@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <graph.h>
-#include <qcustomplot.h>
-
 #include <QMainWindow>
 #include <QTextEdit>
 #include <QVector>
 #include <string>
+
+#include "../Controller/controller.h"
+#include "graph.h"
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,8 +26,6 @@ class MainWindow : public QMainWindow {
  private slots:
 
   void on_pushButton_equals_clicked();
-
-  // void on_result_textChanged();
 
   void on_pushButton_clean_clicked();
 
@@ -90,13 +89,11 @@ class MainWindow : public QMainWindow {
 
   void on_pushButton_graph_clicked();
 
-  //    void on_result_textChanged(const QString &arg1);
-
  private:
   Ui::MainWindow *ui;
   graph *grap;
 
  signals:
-  void signal(int xBegin, int xEnd, int yBegin, int yEnd, char *ex_str);
+  void signal(int xBegin, int xEnd, int yBegin, int yEnd, std::string ex_str);
 };
 #endif  // MAINWINDOW_H

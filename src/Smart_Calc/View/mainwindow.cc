@@ -2,11 +2,6 @@
 
 #include "ui_mainwindow.h"
 
-extern "C" {
-//  char* s21_parse(char *str, char *ex_str, int *status);
-#include "s21_smart_calc.h"
-}
-
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -20,63 +15,28 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_pushButton_equals_clicked() {
-  int status = 0;
-  char ex_str[MAX_STR] = {0};
-  double result = 0;
-     std::string x_str = ui->input_x->text().toUtf8().constData();
-     const char* xs = x_str.c_str();
-  double x = atof(xs);
-  memset(ex_str, ' ', MAX_STR);
+  std::string x_str = ui->input_x->text().toUtf8().constData();
   std::string v_str = ui->result->text().toUtf8().constData();
-  const char* str = v_str.c_str();
-  auto s = const_cast<char*>(str);
-  s21_parse(s, ex_str, &status);
-  if (!status && v_str != "" && v_str != "ERROR") {
-    result = s21_callculation(ex_str, &status, x);
-    if (!status) {
-      std::string st = std::to_string(result);
-      ui->result->setText(ui->result->text() + "=" +
-                          QString::fromStdString(st));
-    } else {
-      ui->result->setText("ERROR");
-    }
-  } else {
-    ui->result->setText("ERROR");
-  }
+  s21::Controller controller;
+  ui->result->setText(
+      ui->result->text() + "=" +
+      QString::fromStdString(controller.GetResultStr(v_str, x_str)));
 }
 
 void MainWindow::on_pushButton_graph_clicked() {
-  int status = 0;
-  char ex_str[MAX_STR] = {0};
-  double result = 0;
-  int xBegin = 0;
-  int xEnd = 0;
-  int yBegin = 0;
-  int yEnd = 0;
-
-  //     std::string x_str = ui->input_x->text().toUtf8().constData();
-  //     const char* xs = x_str.c_str();
-  //    double x =0;
-  memset(ex_str, ' ', MAX_STR);
+  int xBegin = atoi(ui->domain_min->text().toUtf8().constData());
+  int xEnd = atoi(ui->domain_max->text().toUtf8().constData());
+  int yBegin = atoi(ui->range_min->text().toUtf8().constData());
+  int yEnd = atoi(ui->range_max->text().toUtf8().constData());
   std::string v_str = ui->result->text().toUtf8().constData();
-  const char* str = v_str.c_str();
-  auto s = const_cast<char*>(str);
-  s21_parse(s, ex_str, &status);
-  if (!status && v_str != "" && v_str != "ERROR") {
-    std::string st = std::to_string(result);
-    xBegin = atoi(ui->domain_min->text().toUtf8().constData());
-    xEnd = atoi(ui->domain_max->text().toUtf8().constData());
-    yBegin = atoi(ui->range_min->text().toUtf8().constData());
-    yEnd = atoi(ui->range_max->text().toUtf8().constData());
-    result = s21_callculation(ex_str, &status, 0);
-    if (status != 1) {
-      emit signal(xBegin, xEnd, yBegin, yEnd, ex_str);
-      grap->show();
-    } else {
-      ui->result->setText("ERROR");
-    }
+  s21::Controller controller;
+  std::string res = controller.GetResultStr(v_str, "0");
+  if (res != "ERROR") {
+    emit signal(xBegin, xEnd, yBegin, yEnd, v_str);
+    grap->show();
+
   } else {
-    ui->result->setText("ERROR");
+    ui->result->setText(QString::fromStdString(res));
   }
 }
 

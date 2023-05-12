@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include <QDialog>
-
 namespace Ui {
 class graph;
 }
@@ -23,7 +22,7 @@ class graph : public QDialog {
   QVector<double> x, y;
 
  public slots:
-  void slot(int xBegin, int xEnd, int yBegin, int yEnd, char *ex_str);
+  void slot(int xBegin, int xEnd, int yBegin, int yEnd, std::string str);
 };
 
 #endif  // GRAPH_H

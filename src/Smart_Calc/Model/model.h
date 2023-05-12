@@ -95,8 +95,9 @@ class Model {
   int unar_op_and_functions(std::stack<double> &stack_value, int status,
                             char curr_op);
   void func(std::stack<double> &stack_value, char symb, int *status);
-  double callculation(char *ex_str, int *status, double x);
+  long double callculation(char *ex_str, int *status, long double x);
   int operators(std::stack<double> &stack_value, int status, char curr_op);
+  std::string Result(std::string str_, std::string x_);
   // s21_calculation.c
   /// @brief Function clalculation polish natation
   /// @param ex_str expression in polish notation
