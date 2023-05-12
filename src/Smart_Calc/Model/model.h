@@ -165,7 +165,7 @@ class Model {
   //    void s21_remove_val(list_value *head);
   //
   ///// @brief Function for push in lincked with numbers(need in calculation)
-  ///list
+  /// list
   ///// new elem
   ///// @param head poiner on elem stack
   ///// @param value meaning number
@@ -173,7 +173,7 @@ class Model {
   //    list_value *s21_push_value(list_value *head, double value);
   //
   ///// @brief Function for delete in lincked with numbers(need in calculation)
-  ///list
+  /// list
   ///// new elem
   ///// @param head poiner on elem stack
   ///// @return stack

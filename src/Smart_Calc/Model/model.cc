@@ -2,7 +2,7 @@
 
 namespace s21 {
 char *Model::parse(char *str, char *ex_str, int *status) {
-  int i = 0, flag_op = 0, double_op = 1, flag_point = 0, number_of_brack = 0,
+  int flag_op = 0, double_op = 1, flag_point = 0, number_of_brack = 0,
       flag_func = 0;
   std::stack<stack_elem> stack_op;
   char *tmp = ex_str;
@@ -15,17 +15,15 @@ char *Model::parse(char *str, char *ex_str, int *status) {
         flag_func = 0;
       }
       if (*str == '-') {
-        if (i == 0 || number_of_brack > 0) {
+        if (ex_str == tmp || number_of_brack > 0) {
           stack_op.push({'~', 7});
           str++;
-          i++;
         }
       }
       if (*str == '+') {
-        if (i == 0 || number_of_brack > 0) {
+        if (ex_str == tmp || number_of_brack > 0) {
           stack_op.push({'`', 7});
           str++;
-          i++;
         }
       }
       parse_number(&ex_str, &str, status, &double_op, &flag_point);
@@ -151,20 +149,19 @@ void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str,
       }
     } else {
       prior = priority(**str);
-      if (stack_op.size() == 0) {
+      if (stack_op.empty()) {
         stack_op.push({**str, prior});
       } else {
         if (stack_op.top().priority < prior) {
           stack_op.push({**str, prior});
         } else {
-          while (stack_op.size() != 0 && prior <= stack_op.top().priority &&
+          while (!stack_op.empty() && prior <= stack_op.top().priority &&
                  **str != '(') {
             **ex_str = stack_op.top().elem;
             *ex_str = *ex_str + 2;
             stack_op.pop();
           }
           stack_op.push({**str, prior});
-          stack_op.push(st);
         }
       }
     }
@@ -239,10 +236,8 @@ void Model::parse_func(std::stack<stack_elem> &stack_op, char **str,
                        int *double_op) {
   char *func[10] = {"sin",  "cos", "tan",  "asin", "acos",
                     "atan", "mod", "sqrt", "ln",   "log"};
-  int len = 0;
-  int prior = -1;
+  int len = 0, prior = -1;
   char tok = ' ';
-  stack_elem st;
   for (int j = 0; j < 10; j++) {
     if (strstr(*str, func[j]) == *str) {
       len = strlen(func[j]);

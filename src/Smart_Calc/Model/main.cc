@@ -7,7 +7,7 @@ int main() {
   int status = 0;
   memset(ex_str, ' ', MAX_STR);
   s21::Model mod;
-  mod.parse("(10+55)/2*3", ex_str, &status);
+  mod.parse("asin(atan(sqrt(0.1)))*20+1+10mod5.1", ex_str, &status);
   double val = mod.callculation(ex_str, &status, 0.0);
 
   // double val = strtod(ex_str, nullptr);
@@ -17,10 +17,10 @@ int main() {
   //     s21::Model::stack_elem st;
   // std::stack<s21::Model::stack_elem> s({st});
   // s.top();
-  for (int i = 0; i < 90; i++) {
-    std::cout << ex_str[i];
-  }
+  //  for (int i = 0; i < 90; i++) {
+  //    std::cout << ex_str[i];
+  //  }
 
-  //       std::cout << val;
+  std::cout << val;
   return 0;
 }
