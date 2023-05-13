@@ -1,16 +1,18 @@
-CC=gcc -std=c11 -g
-CFLAGS=-Wall -Werror -Wextra
-GCOVFLAGS = -fprofile-arcs -ftest-coverage
-SRCS=$(wildcard s21_*.c)
-OBJS=$(SRCS:.c=.o)
-TESTSFLAGS_MAC= -lcheck 
-# -lpthread -lsubunit -lrt -lm
-LIB_NAME=smart_calc
+CC= g++ -std=c++17
+CFLAGS=  -Wall -Werror -Wextra --coverage -g
+OS = $(shell uname)
+ifeq ($(OS), Linux)
+	GTEST_FLAGS = -lgtest -lgtest_main -lm -pthread -lrt -lsubunit
+else
+	GTEST_FLAGS = -lgtest -lgtest_main
+endif
+TESTSFLAGS_MAC= -lgtest -lgtest_main
+LIB_NAME=SmartCalcCpp
 
 all: install
 
 to_style:
-	clang-format -style=google -i *.c *.cpp *.h
+	clang-format -style=google -i Model/*.cc Model/*.h View/*.cc View/*.h Controller/*.cc Controller/*.h
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -42,7 +42,7 @@ class Model {
   /// @param flag_point flag for "."
   /// @return int i counter
   void ParseNumber(char **ex_str, char **str, int *status, int *double_op,
-                    int *flag_point);
+                   int *flag_point);
 
   /// @brief Function for checks current symbol is operator and push in stack or
   /// in exit str depending priority
@@ -57,9 +57,9 @@ class Model {
   /// @param number_of_brack counter for bracked
   /// @return stack
 
-  void ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str, char **str,
-                int *status, int *flag_op, int *double_op,
-                int *number_of_brack);
+  void ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str,
+                      char **str, int *status, int *flag_op, int *double_op,
+                      int *number_of_brack);
 
   /// @brief Function for checks current symbol is function and push in stack
   /// and depending priority
@@ -74,7 +74,7 @@ class Model {
   /// @return stack
 
   void ParseFunction(std::stack<stack_elem> &stack_op, char **str, int *flag_op,
-                  int *flag_func, int *status, int *double_op);
+                     int *flag_func, int *status, int *double_op);
 
   /// @brief Function for check current symbol is operator
   /// @param str current symbol
@@ -93,7 +93,7 @@ class Model {
   char TokOfFunction(char *str, int *prior);
 
   int UnarOperAndFunc(std::stack<double> &stack_value, int status,
-                            char curr_op);
+                      char curr_op);
   void CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *status);
   long double Calculation(char *ex_str, int *status, long double x);
   int BinarOper(std::stack<double> &stack_value, int status, char curr_op);

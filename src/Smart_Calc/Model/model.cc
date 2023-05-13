@@ -44,7 +44,7 @@ char *Model::Parse(char *str, char *ex_str, int *status) {
       }
       ParseNumber(&ex_str, &str, status, &double_op, &flag_point);
       ParseOperators(stack_op, &ex_str, &str, status, &flag_op, &double_op,
-               &number_of_brack);
+                     &number_of_brack);
       ParseFunction(stack_op, &str, &flag_op, &flag_func, status, &double_op);
       if (*str != '\0') {
         str++;
@@ -62,7 +62,7 @@ char *Model::Parse(char *str, char *ex_str, int *status) {
 }
 
 void Model::ParseNumber(char **ex_str, char **str, int *status, int *double_op,
-                         int *flag_point) {
+                        int *flag_point) {
   int flag_e = 0;
   int double_e = 0;
   if ((isdigit(**str)) || (**str == '.' && flag_point == 0) || **str == 'x') {
@@ -122,8 +122,8 @@ void Model::ParseNumber(char **ex_str, char **str, int *status, int *double_op,
 }
 
 void Model::ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str,
-                     char **str, int *status, int *flag_op, int *double_op,
-                     int *number_of_brack) {
+                           char **str, int *status, int *flag_op,
+                           int *double_op, int *number_of_brack) {
   int prior = -1;
   if (IsOperator(**str) && *double_op != 2) {
     if (**str == '(' && *double_op) {
@@ -243,8 +243,8 @@ int Model::Priority(char str) {
 }
 
 void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
-                       int *flag_op, int *flag_func, int *status,
-                       int *double_op) {
+                          int *flag_op, int *flag_func, int *status,
+                          int *double_op) {
   char *func[10] = {"sin",  "cos", "tan",  "asin", "acos",
                     "atan", "mod", "sqrt", "ln",   "log"};
   int len = 0, prior = -1;
@@ -269,8 +269,8 @@ void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
     }
     *status = 0;
   } else {
-    if (!IsOperator(**str) && !isdigit(**str) && **str != '.' &&
-        **str != 'x' && **str != '\0') {
+    if (!IsOperator(**str) && !isdigit(**str) && **str != '.' && **str != 'x' &&
+        **str != '\0') {
       *status = 1;
     }
   }
@@ -339,7 +339,7 @@ long double Model::Calculation(char *ex_str, int *status, long double x) {
         ex_str++;
       }
     } else {
-        CalcOpAndFunc(stack_value, *ex_str, status);
+      CalcOpAndFunc(stack_value, *ex_str, status);
       ex_str++;
     }
     ex_str++;
@@ -351,7 +351,8 @@ long double Model::Calculation(char *ex_str, int *status, long double x) {
   return result;
 }
 
-void Model::CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *status) {
+void Model::CalcOpAndFunc(std::stack<double> &stack_value, char symb,
+                          int *status) {
   switch (symb) {
     case '+':
       *status = BinarOper(stack_value, *status, symb);
@@ -411,7 +412,7 @@ void Model::CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *statu
 }
 
 int Model::UnarOperAndFunc(std::stack<double> &stack_value, int status,
-                                 char curr_op) {
+                           char curr_op) {
   double b = 0;
   double result = 0;
   if (!stack_value.empty()) {
