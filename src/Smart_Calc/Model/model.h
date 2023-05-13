@@ -31,7 +31,7 @@ class Model {
   /// @param ex_str exit expression in polish notation
   /// @param status error if status ==0 it's ok if status == 1 it's error
   /// @return char *exit str in polish notation
-  char *parse(char *str, char *ex_str, int *status);
+  char *Parse(char *str, char *ex_str, int *status);
 
   /// @brief Function for checks current symbol is number in input str
   /// @param ex_str exit str
@@ -41,7 +41,7 @@ class Model {
   /// @param double_op flag for double operation
   /// @param flag_point flag for "."
   /// @return int i counter
-  void parse_number(char **ex_str, char **str, int *status, int *double_op,
+  void ParseNumber(char **ex_str, char **str, int *status, int *double_op,
                     int *flag_point);
 
   /// @brief Function for checks current symbol is operator and push in stack or
@@ -57,7 +57,7 @@ class Model {
   /// @param number_of_brack counter for bracked
   /// @return stack
 
-  void parse_op(std::stack<stack_elem> &stack_op, char **ex_str, char **str,
+  void ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str, char **str,
                 int *status, int *flag_op, int *double_op,
                 int *number_of_brack);
 
@@ -73,30 +73,30 @@ class Model {
   /// @param double_op flag for cheks double operator
   /// @return stack
 
-  void parse_func(std::stack<stack_elem> &stack_op, char **str, int *flag_op,
+  void ParseFunction(std::stack<stack_elem> &stack_op, char **str, int *flag_op,
                   int *flag_func, int *status, int *double_op);
 
   /// @brief Function for check current symbol is operator
   /// @param str current symbol
   /// @return int error
-  int is_operator(char str);
+  int IsOperator(char str);
 
   /// @brief Function for check priority operator
   /// @param str current sybol
   /// @return int priority
-  int priority(char str);
+  int Priority(char str);
 
   /// @brief Function for check current expresion is element array with function
   /// @param str pointer str element array with functoin
   /// @param prior priority function
   /// @return  char token(abbreviated function to 1 symbol
-  char tok_func(char *str, int *prior);
+  char TokOfFunction(char *str, int *prior);
 
-  int unar_op_and_functions(std::stack<double> &stack_value, int status,
+  int UnarOperAndFunc(std::stack<double> &stack_value, int status,
                             char curr_op);
-  void func(std::stack<double> &stack_value, char symb, int *status);
-  long double callculation(char *ex_str, int *status, long double x);
-  int operators(std::stack<double> &stack_value, int status, char curr_op);
+  void CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *status);
+  long double Calculation(char *ex_str, int *status, long double x);
+  int Operators(std::stack<double> &stack_value, int status, char curr_op);
   std::string Result(std::string str_, std::string x_);
   // s21_calculation.c
   /// @brief Function clalculation polish natation

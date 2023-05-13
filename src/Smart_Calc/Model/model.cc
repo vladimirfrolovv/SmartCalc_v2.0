@@ -8,8 +8,8 @@ std::string Model::Result(std::string str_, std::string x_) {
   char ex_str[MAX_STR] = {0};
   int status = 0;
   memset(ex_str, ' ', MAX_STR);
-  parse(str, ex_str, &status);
-  long double val = callculation(ex_str, &status, x);
+  Parse(str, ex_str, &status);
+  long double val = Calculation(ex_str, &status, x);
   std::string result = "ERROR";
   if (status == 0) {
     result = std::to_string(val);
@@ -17,7 +17,7 @@ std::string Model::Result(std::string str_, std::string x_) {
   }
   return result;
 }
-char *Model::parse(char *str, char *ex_str, int *status) {
+char *Model::Parse(char *str, char *ex_str, int *status) {
   int flag_op = 0, double_op = 1, flag_point = 0, number_of_brack = 0,
       flag_func = 0;
   std::stack<stack_elem> stack_op;
@@ -42,10 +42,10 @@ char *Model::parse(char *str, char *ex_str, int *status) {
           str++;
         }
       }
-      parse_number(&ex_str, &str, status, &double_op, &flag_point);
-      parse_op(stack_op, &ex_str, &str, status, &flag_op, &double_op,
+      ParseNumber(&ex_str, &str, status, &double_op, &flag_point);
+      ParseOperators(stack_op, &ex_str, &str, status, &flag_op, &double_op,
                &number_of_brack);
-      parse_func(stack_op, &str, &flag_op, &flag_func, status, &double_op);
+      ParseFunction(stack_op, &str, &flag_op, &flag_func, status, &double_op);
       if (*str != '\0') {
         str++;
       }
@@ -61,7 +61,7 @@ char *Model::parse(char *str, char *ex_str, int *status) {
   return ex_str;
 }
 
-void Model::parse_number(char **ex_str, char **str, int *status, int *double_op,
+void Model::ParseNumber(char **ex_str, char **str, int *status, int *double_op,
                          int *flag_point) {
   int flag_e = 0;
   int double_e = 0;
@@ -121,11 +121,11 @@ void Model::parse_number(char **ex_str, char **str, int *status, int *double_op,
   }
 }
 
-void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str,
+void Model::ParseOperator(std::stack<stack_elem> &stack_op, char **ex_str,
                      char **str, int *status, int *flag_op, int *double_op,
                      int *number_of_brack) {
   int prior = -1;
-  if (is_operator(**str) && *double_op != 2) {
+  if (IsOperator(**str) && *double_op != 2) {
     if (**str == '(' && *double_op) {
       if (*number_of_brack >= 0) {
         *number_of_brack += 1;
@@ -159,7 +159,7 @@ void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str,
         *number_of_brack -= 1;
       }
     } else {
-      prior = priority(**str);
+      prior = Priority(**str);
       if (stack_op.empty()) {
         stack_op.push({**str, prior});
       } else {
@@ -185,7 +185,7 @@ void Model::parse_op(std::stack<stack_elem> &stack_op, char **ex_str,
   }
 }
 
-int Model::is_operator(char str) {
+int Model::IsOperator(char str) {
   int status = 0;
   switch (str) {
     case '+':
@@ -215,7 +215,7 @@ int Model::is_operator(char str) {
   return status;
 }
 
-int Model::priority(char str) {
+int Model::Priority(char str) {
   int prior = -1;
   switch (str) {
     case '^':
@@ -242,7 +242,7 @@ int Model::priority(char str) {
   return prior;
 }
 
-void Model::parse_func(std::stack<stack_elem> &stack_op, char **str,
+void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
                        int *flag_op, int *flag_func, int *status,
                        int *double_op) {
   char *func[10] = {"sin",  "cos", "tan",  "asin", "acos",
@@ -269,14 +269,14 @@ void Model::parse_func(std::stack<stack_elem> &stack_op, char **str,
     }
     *status = 0;
   } else {
-    if (!is_operator(**str) && !isdigit(**str) && **str != '.' &&
+    if (!IsOperator(**str) && !isdigit(**str) && **str != '.' &&
         **str != 'x' && **str != '\0') {
       *status = 1;
     }
   }
 }
 
-char Model::tok_func(char *str, int *prior) {
+char Model::TokOfFunction(char *str, int *prior) {
   char tok = ' ';
   if (!strcmp(str, "sin")) {
     tok = 's';
@@ -312,7 +312,7 @@ char Model::tok_func(char *str, int *prior) {
   return tok;
 }
 
-long double Model::callculation(char *ex_str, int *status, long double x) {
+long double Model::Calculation(char *ex_str, int *status, long double x) {
   long double result = 0.0;
   int i = 0;
   double value = 0;
@@ -339,7 +339,7 @@ long double Model::callculation(char *ex_str, int *status, long double x) {
         ex_str++;
       }
     } else {
-      func(stack_value, *ex_str, status);
+        CalcOpAndFunc(stack_value, *ex_str, status);
       ex_str++;
     }
     ex_str++;
@@ -351,58 +351,58 @@ long double Model::callculation(char *ex_str, int *status, long double x) {
   return result;
 }
 
-void Model::func(std::stack<double> &stack_value, char symb, int *status) {
+void Model::CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *status) {
   switch (symb) {
     case '+':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case '-':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case '*':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case '/':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case '~':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'm':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case 's':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'c':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 't':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'S':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'C':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'T':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'Q':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'L':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case 'l':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     case '^':
-      *status = operators(stack_value, *status, symb);
+      *status = BinarOper(stack_value, *status, symb);
       break;
     case '`':
-      *status = unar_op_and_functions(stack_value, *status, symb);
+      *status = UnarOperAndFunc(stack_value, *status, symb);
       break;
     default:
       *status = 1;
@@ -410,7 +410,7 @@ void Model::func(std::stack<double> &stack_value, char symb, int *status) {
   }
 }
 
-int Model::unar_op_and_functions(std::stack<double> &stack_value, int status,
+int Model::UnarOperAndFunc(std::stack<double> &stack_value, int status,
                                  char curr_op) {
   double b = 0;
   double result = 0;
@@ -446,7 +446,7 @@ int Model::unar_op_and_functions(std::stack<double> &stack_value, int status,
   return status;
 }
 
-int Model::operators(std::stack<double> &stack_value, int status,
+int Model::BinarOper(std::stack<double> &stack_value, int status,
                      char curr_op) {
   if (!stack_value.empty()) {
     double result = 0, a = 0, b = 0;
