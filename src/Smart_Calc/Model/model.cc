@@ -121,7 +121,7 @@ void Model::ParseNumber(char **ex_str, char **str, int *status, int *double_op,
   }
 }
 
-void Model::ParseOperator(std::stack<stack_elem> &stack_op, char **ex_str,
+void Model::ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str,
                      char **str, int *status, int *flag_op, int *double_op,
                      int *number_of_brack) {
   int prior = -1;
@@ -252,7 +252,7 @@ void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
   for (int j = 0; j < 10; j++) {
     if (strstr(*str, func[j]) == *str) {
       len = strlen(func[j]);
-      tok = tok_func(func[j], &prior);
+      tok = TokOfFunction(func[j], &prior);
     }
   }
   if (tok != ' ') {

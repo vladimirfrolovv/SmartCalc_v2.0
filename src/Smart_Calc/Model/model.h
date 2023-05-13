@@ -96,7 +96,7 @@ class Model {
                             char curr_op);
   void CalcOpAndFunc(std::stack<double> &stack_value, char symb, int *status);
   long double Calculation(char *ex_str, int *status, long double x);
-  int Operators(std::stack<double> &stack_value, int status, char curr_op);
+  int BinarOper(std::stack<double> &stack_value, int status, char curr_op);
   std::string Result(std::string str_, std::string x_);
   // s21_calculation.c
   /// @brief Function clalculation polish natation

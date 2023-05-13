@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+include_directories(qcp)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
@@ -19,14 +19,14 @@ set(PROJECT_SOURCES
     View/graph.cc
     View/main.cc
     View/mainwindow.cc
-    View/qcustomplot.cc
+    qcp/qcustomplot.cpp
 
     Controller/controller.h
     Controller/controller.cc
     Model/model.h
     View/graph.h
     View/mainwindow.h
-    View/qcustomplot.h
+    qcp/qcustomplot.h
 
 
     View/graph.ui
