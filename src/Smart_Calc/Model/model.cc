@@ -154,10 +154,9 @@ void Model::ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str,
             *ex_str = *ex_str + 2;
             stack_op.pop();
           }
-          if(!stack_op.empty()){
-              stack_op.pop();
+          if (!stack_op.empty()) {
+            stack_op.pop();
           }
-
         }
         *number_of_brack -= 1;
       }
@@ -249,7 +248,7 @@ void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
                           int *flag_op, int *flag_func, int *status,
                           int *double_op) {
   std::string func[10] = {"sin",  "cos", "tan",  "asin", "acos",
-                    "atan", "mod", "sqrt", "ln",   "log"};
+                          "atan", "mod", "sqrt", "ln",   "log"};
   int len = 0, prior = -1;
   char tok = ' ';
   for (int j = 0; j < 10; j++) {

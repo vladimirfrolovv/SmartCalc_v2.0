@@ -6,8 +6,6 @@ ifeq ($(OS), Linux)
 else
 	GTEST_FLAGS = -lgtest -lgtest_main
 endif
-GTEST_FLAGS = -lgtest -lgtest_main
-LIB_NAME=SmartCalcCpp
 
 all: install
 
@@ -21,36 +19,28 @@ dvi:
 	doxygen 
 	open html/index.html
 
-$(LIB_NAME).a: $(OBJS)
-	ar rc $(LIB_NAME).a $^
-	ranlib $(LIB_NAME).a
-	rm -rf *.o
 
 install: 
-	mkdir Qmake
-	cd Qmake/ && qmake ../Smart_Calc.pro && make 
+	mkdir Cmake
+	cd Cmake/ && cmake ../CMakeLists.txt && make
 	
 open:
-	open Qmake/Smart_Calc.app
+	open Cmake/CmakeSmartCalc.app
 
 uninstall:
-	rm -rf Qmake
+	rm -rf Cmake
 
 dist:
-	mkdir SmartCalc
-	cp -r *.c *.h *.cpp *.ui *.pro Makefile tests/ SmartCalc
-	tar -cvzf dist.tar.gz SmartCalc
-	-rm -rf SmartCalc
+	mkdir SmartCalcCpp
+	cp -r Model/* View/* Controller/* CMakeLists.txt tests/ Makefile
+	tar -cvzf dist.tar.gz SmartCalcCpp
+	-rm -rf SmartCalcCpp
 
 
-test:
+test: clean
 	$(CC) $(CFLAGS)  tests/test.cc Controller/controller.cc Model/model.cc -o test $(GTEST_FLAGS)
 	./test
 
-
-
-add_coverage_flag:
-	$(eval CFLAGS += --coverage)
 
 gcov_report: test
 	./test
@@ -60,6 +50,6 @@ gcov_report: test
 	open ./report/index-sort-f.html
 
 clean:
-	rm -rf *.o test *.a *.gcno *.gcda *.gcov *.html *.css *.out *.info report Qmake html dist.tar.gz SmartCalc
+	rm -rf *.o test *.a *.gcno *.gcda *.gcov *.html *.css *.out *.info report Cmake html dist.tar.gz SmartCalcCpp
 
 rebuild: clean all 
