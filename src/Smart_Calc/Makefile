@@ -12,13 +12,9 @@ all: install
 to_style:
 	clang-format -style=google -i Model/*.cc Model/*.h View/*.cc View/*.h Controller/*.cc Controller/*.h
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
 dvi:
 	doxygen 
 	open html/index.html
-
 
 install: 
 	mkdir Cmake
@@ -32,7 +28,7 @@ uninstall:
 
 dist:
 	mkdir SmartCalcCpp
-	cp -r Model/* View/* Controller/* CMakeLists.txt tests/ Makefile
+	cp -r Model/* View/* Controller/* CMakeLists.txt tests/ Makefile SmartCalcCpp
 	tar -cvzf dist.tar.gz SmartCalcCpp
 	-rm -rf SmartCalcCpp
 
