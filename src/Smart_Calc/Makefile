@@ -6,7 +6,7 @@ ifeq ($(OS), Linux)
 else
 	GTEST_FLAGS = -lgtest -lgtest_main
 endif
-TESTSFLAGS_MAC= -lgtest -lgtest_main
+GTEST_FLAGS = -lgtest -lgtest_main
 LIB_NAME=SmartCalcCpp
 
 all: install
@@ -43,15 +43,16 @@ dist:
 	-rm -rf SmartCalc
 
 
-test: $(LIB_NAME).a 
-	$(CC) $(CFLAGS) tests/test.c -L. $(LIB_NAME).a $(TESTSFLAGS_MAC) -o test
+test:
+	$(CC) $(CFLAGS)  tests/test.cc Controller/controller.cc Model/model.cc -o test $(GTEST_FLAGS)
 	./test
+
 
 
 add_coverage_flag:
 	$(eval CFLAGS += --coverage)
 
-gcov_report: add_coverage_flag test
+gcov_report: test
 	./test
 	lcov -t "test" -o Coverage_Report.info -c -d .
 	genhtml -o ./report Coverage_Report.info

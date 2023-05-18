@@ -2,12 +2,10 @@
 #define SRC_S21_SMART_CALCULATOR_
 
 #include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <cmath>
 #include <iostream>
+#include <string>
+#include <cstring>
 #include <stack>
 
 #define MAX_NUM 30
@@ -90,7 +88,7 @@ class Model {
   /// @param str pointer str element array with functoin
   /// @param prior priority function
   /// @return  char token(abbreviated function to 1 symbol
-  char TokOfFunction(char *str, int *prior);
+  char TokOfFunction(const char *str, int *prior);
 
   int UnarOperAndFunc(std::stack<double> &stack_value, int status,
                       char curr_op);

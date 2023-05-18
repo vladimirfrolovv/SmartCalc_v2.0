@@ -149,12 +149,15 @@ void Model::ParseOperators(std::stack<stack_elem> &stack_op, char **ex_str,
           stack_op.pop();
           *flag_op = 0;
         } else {
-          while (stack_op.top().elem != '(') {
+          while (!stack_op.empty() && stack_op.top().elem != '(') {
             **ex_str = stack_op.top().elem;
             *ex_str = *ex_str + 2;
             stack_op.pop();
           }
-          stack_op.pop();
+          if(!stack_op.empty()){
+              stack_op.pop();
+          }
+
         }
         *number_of_brack -= 1;
       }
@@ -245,14 +248,14 @@ int Model::Priority(char str) {
 void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
                           int *flag_op, int *flag_func, int *status,
                           int *double_op) {
-  char *func[10] = {"sin",  "cos", "tan",  "asin", "acos",
+  std::string func[10] = {"sin",  "cos", "tan",  "asin", "acos",
                     "atan", "mod", "sqrt", "ln",   "log"};
   int len = 0, prior = -1;
   char tok = ' ';
   for (int j = 0; j < 10; j++) {
-    if (strstr(*str, func[j]) == *str) {
-      len = strlen(func[j]);
-      tok = TokOfFunction(func[j], &prior);
+    if (strstr(*str, func[j].c_str()) == *str) {
+      len = strlen(func[j].c_str());
+      tok = TokOfFunction(func[j].c_str(), &prior);
     }
   }
   if (tok != ' ') {
@@ -276,7 +279,7 @@ void Model::ParseFunction(std::stack<stack_elem> &stack_op, char **str,
   }
 }
 
-char Model::TokOfFunction(char *str, int *prior) {
+char Model::TokOfFunction(const char *str, int *prior) {
   char tok = ' ';
   if (!strcmp(str, "sin")) {
     tok = 's';
@@ -413,7 +416,6 @@ void Model::CalcOpAndFunc(std::stack<double> &stack_value, char symb,
 
 int Model::UnarOperAndFunc(std::stack<double> &stack_value, int status,
                            char curr_op) {
-  double b = 0;
   double result = 0;
   if (!stack_value.empty()) {
     if (curr_op == '`') {
